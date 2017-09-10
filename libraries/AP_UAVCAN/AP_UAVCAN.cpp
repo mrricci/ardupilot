@@ -22,6 +22,7 @@
 #include <uavcan/equipment/actuator/Command.hpp>
 #include <uavcan/equipment/actuator/Status.hpp>
 #include <uavcan/equipment/esc/RawCommand.hpp>
+#include <uavcan/equipment/genset/GenSetCmd.hpp>
 
 #include <AP_BoardConfig/AP_BoardConfig.h>
 
@@ -230,6 +231,7 @@ static void air_data_st_cb(const uavcan::ReceivedDataStructure<uavcan::equipment
 // publisher interfaces
 static uavcan::Publisher<uavcan::equipment::actuator::ArrayCommand> *act_out_array;
 static uavcan::Publisher<uavcan::equipment::esc::RawCommand> *esc_raw;
+static uavcan::Publisher<uavcan::equipment::genset::GenSetCmd> *genset_cmd;
 
 AP_UAVCAN::AP_UAVCAN() :
     _initialized(false), _rco_armed(false), _rco_safety(false), _rc_out_sem(nullptr), _node_allocator(
@@ -349,6 +351,11 @@ bool AP_UAVCAN::try_init(void)
                     esc_raw->setTxTimeout(uavcan::MonotonicDuration::fromMSec(20));
                     esc_raw->setPriority(uavcan::TransferPriority::OneLowerThanHighest);
 
+                    // LPT GenSet output message publisher
+                    genset_cmd = new uavcan::Publisher<uavcan::equipment::genset::GenSetCmd>(*node);
+                    genset_cmd->setTxTimeout(uavcan::MonotonicDuration::fromMSec(20));
+                    genset_cmd->setPriority(uavcan::TransferPriority::OneLowerThanHighest);
+
                     /*
                      * Informing other nodes that we're ready to work.
                      * Default mode is INITIALIZING.
@@ -394,11 +401,20 @@ void AP_UAVCAN::do_cyclic(void)
 
     if (_initialized) {
         auto *node = get_node();
-        const int error = node->spin(uavcan::MonotonicDuration::fromMSec(1));
+        const int error = node->spin(uavcan::MonotonicDuration::fromMSec(10));
         if (error < 0) {
             hal.scheduler->delay_microseconds(1000);
         } else {
             if (rc_out_sem_take()) {
+                // Broadcast LPT GenSet message
+            	//	note: rc channels are 1-indexed in the GUI and 0-indexed in the code
+                if (_rco_conf[10].active)
+                {
+                    uavcan::equipment::genset::GenSetCmd genset_cmd_msg;
+                    genset_cmd_msg.pwm = _rco_conf[10].pulse; //output channel 11
+                    genset_cmd->broadcast(genset_cmd_msg);  //I think this needs to be uncommented to enable CAN ON\OFF commands
+                }
+
                 if (_rco_armed) {
                     bool repeat_send;
 
