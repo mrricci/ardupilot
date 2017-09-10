@@ -145,6 +145,8 @@ void Copter::init_ardupilot()
     
     barometer.init();
 
+    genset.init();
+
     // we start by assuming USB connected, as we initialed the serial
     // port with SERIAL0_BAUD. check_usb_mux() fixes this if need be.
     ap.usb_connected = true;
