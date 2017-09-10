@@ -446,6 +446,7 @@ void AP_UAVCAN::do_cyclic(void)
         auto *node = get_node();
         const int error = node->spin(uavcan::MonotonicDuration::fromMSec(10));
         if (error < 0) {
+        	debug_uavcan(1, "AP_UAVCAN::do_cyclic(void)\n\r    spin error\n\r");
             hal.scheduler->delay_microseconds(1000);
         } else {
             if (rc_out_sem_take()) {
@@ -718,6 +719,7 @@ void AP_UAVCAN::update_gps_state(uint8_t node)
 
 uint8_t AP_UAVCAN::register_baro_listener(AP_Baro_Backend* new_listener, uint8_t preferred_channel)
 {
+    debug_uavcan(1, "AP_UAVCAN::register_baro_listener(AP_Baro_Backend* new_listener, uint8_t preferred_channel)\n\r");
     uint8_t sel_place = 255, ret = 0;
 
     for (uint8_t i = 0; i < AP_UAVCAN_MAX_LISTENERS; i++) {
