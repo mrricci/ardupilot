@@ -11,11 +11,13 @@
 #include <AP_HAL/CAN.h>
 #include <AP_HAL/Semaphores.h>
 #include <AP_GPS/AP_GPS.h>
+#include <AP_GenSet/AP_GenSet.h>
 #include <AP_Param/AP_Param.h>
 
 #include <AP_GPS/GPS_Backend.h>
 #include <AP_Baro/AP_Baro_Backend.h>
 #include <AP_Compass/AP_Compass.h>
+#include <AP_GenSet/AP_GenSet_Backend.h>
 
 #include <uavcan/helpers/heap_based_pool_allocator.hpp>
 
@@ -31,10 +33,11 @@
 #define UAVCAN_RCO_NUMBER 18
 #endif
 
-#define AP_UAVCAN_MAX_LISTENERS 4
-#define AP_UAVCAN_MAX_GPS_NODES 4
-#define AP_UAVCAN_MAX_MAG_NODES 4
-#define AP_UAVCAN_MAX_BARO_NODES 4
+#define AP_UAVCAN_MAX_LISTENERS 5
+#define AP_UAVCAN_MAX_GPS_NODES 5
+#define AP_UAVCAN_MAX_MAG_NODES 5
+#define AP_UAVCAN_MAX_BARO_NODES 5
+#define AP_UAVCAN_MAX_GENSET_NODES 5
 
 #define AP_UAVCAN_SW_VERS_MAJOR 1
 #define AP_UAVCAN_SW_VERS_MINOR 0
@@ -89,6 +92,14 @@ public:
     Mag_Info *find_mag_node(uint8_t node);
     void update_mag_state(uint8_t node);
 
+
+    uint8_t register_genset_listener(AP_GenSet_Backend* new_listener,
+                                   uint8_t preferred_channel);
+    void remove_genset_listener(AP_GenSet_Backend* rem_listener);
+    AP_GenSet::GenSet_Status *find_genset_node(uint8_t node);
+    void update_genset_status(uint8_t node);
+
+
     // synchronization for RC output
     bool rc_out_sem_take();
     void rc_out_sem_give();
@@ -120,6 +131,13 @@ private:
     Mag_Info _mag_node_state[AP_UAVCAN_MAX_MAG_NODES];
     uint8_t _mag_listener_to_node[AP_UAVCAN_MAX_LISTENERS];
     AP_Compass_Backend* _mag_listeners[AP_UAVCAN_MAX_LISTENERS];
+
+    // ------------------------- GENSET
+    uint8_t _genset_nodes[AP_UAVCAN_MAX_GENSET_NODES];
+    uint8_t _genset_node_taken[AP_UAVCAN_MAX_GENSET_NODES];
+    AP_GenSet::GenSet_Status _genset_node_status[AP_UAVCAN_MAX_GENSET_NODES];
+    uint8_t _genset_listener_to_node[AP_UAVCAN_MAX_LISTENERS];
+    AP_GenSet_Backend* _genset_listeners[AP_UAVCAN_MAX_LISTENERS];
 
     struct {
         uint16_t pulse;
