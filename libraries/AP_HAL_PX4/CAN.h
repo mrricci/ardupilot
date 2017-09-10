@@ -184,6 +184,8 @@ public:
     void handleTxInterrupt(uint64_t utc_usec);
     void handleRxInterrupt(uint8_t fifo_index, uint64_t utc_usec);
 
+    void printCanFrame(uavcan::CanFrame frame);
+
     /**
      * This method is used to count errors and abort transmission on error if necessary.
      * This functionality used to be implemented in the SCE interrupt handler, but that approach was

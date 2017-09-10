@@ -594,7 +594,18 @@ void PX4CAN::handleRxInterrupt(uint8_t fifo_index, uint64_t utc_usec)
         update_event_.signalFromInterrupt();
 
         pollErrorFlagsFromISR();
+
     }
+}
+
+void PX4CAN::printCanFrame(uavcan::CanFrame frame)
+{
+    printf("ID:%X \t dlc:%u \t data:",frame.id, frame.dlc);
+    for(uint8_t i=0; i<frame.dlc; i++)
+    {
+    	printf(" %X",frame.data[i]);
+    }
+    printf("\n\r");
 }
 
 void PX4CAN::pollErrorFlagsFromISR()
@@ -791,7 +802,11 @@ int16_t PX4CANManager::select(uavcan::CanSelectMasks& inout_masks,
     const uavcan::CanSelectMasks in_masks = inout_masks;
     const uavcan::MonotonicTime time = clock::getMonotonic();
 
-    if (can_number_ >= 1) {
+	if (can_number_ >= 1) {
+    	if (if0_.getRxQueueLength()>0)
+    	{
+        	printf("\n\r    PX4CANManager::select(...); RxQueueLength()=%u\n\r",if0_.getRxQueueLength());
+    	}
         if0_.discardTimedOutTxMailboxes(time); // Check TX timeouts - this may release some TX slots
         {
             CriticalSectionLocker cs_locker;
