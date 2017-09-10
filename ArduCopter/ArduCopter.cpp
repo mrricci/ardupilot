@@ -425,6 +425,8 @@ void Copter::ten_hz_logging_loop()
 void Copter::twentyfive_hz_logging()
 {
     genset.update();
+    DataFlash.Log_Write_GenSet(genset);	// TODO only log if new
+
 #if HIL_MODE != HIL_MODE_DISABLED
     // HIL for a copter needs very fast update of the servo values
     gcs_send_message(MSG_SERVO_OUTPUT_RAW);

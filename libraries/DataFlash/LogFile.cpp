@@ -4,6 +4,7 @@
 #include <AP_Baro/AP_Baro.h>
 #include <AP_BattMonitor/AP_BattMonitor.h>
 #include <AP_Compass/AP_Compass.h>
+#include <AP_GenSet/AP_GenSet.h>
 #include <AP_HAL/AP_HAL.h>
 #include <AP_Math/AP_Math.h>
 #include <AP_Param/AP_Param.h>
@@ -1946,6 +1947,28 @@ void DataFlash_Class::Log_Write_Current(const AP_BattMonitor &battery)
         }
         WriteBlock(&pkt, sizeof(pkt));
     }
+}
+
+// Write a GenSet packet
+void DataFlash_Class::Log_Write_GenSet(const AP_GenSet &genset, uint64_t time_us)
+{
+    if (time_us == 0) {
+        time_us = AP_HAL::micros64();
+    }
+
+	const AP_GenSet::GenSet_Status &status = genset.get_status();
+	struct log_GenSet_Status pkt = {
+		LOG_PACKET_HEADER_INIT(LOG_GENSET_STATUS_MSG),
+		time_us         : time_us,
+		fault_level_1   : status.fault_level_1,
+		fault_level_2   : status.fault_level_2,
+		mode            : status.mode,
+		update_counter  : status.update_counter,
+		bus_voltage_mv  : status.bus_voltage_mv,
+		ic_rpm          : status.ic_rpm,
+		last_timestamp  : status.last_timestamp
+	};
+	WriteBlock(&pkt, sizeof(pkt));
 }
 
 // Write a Compass packet

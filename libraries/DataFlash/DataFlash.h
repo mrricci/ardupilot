@@ -10,6 +10,7 @@
 #include <AP_InertialSensor/AP_InertialSensor.h>
 #include <AP_RSSI/AP_RSSI.h>
 #include <AP_Baro/AP_Baro.h>
+#include <AP_GenSet/AP_GenSet.h>
 #include <AP_AHRS/AP_AHRS.h>
 #include <AP_Vehicle/AP_Vehicle.h>
 #include <AP_Mission/AP_Mission.h>
@@ -140,6 +141,7 @@ public:
     void Log_Write_Attitude(AP_AHRS &ahrs, const Vector3f &targets);
     void Log_Write_AttitudeView(AP_AHRS_View &ahrs, const Vector3f &targets);
     void Log_Write_Current(const AP_BattMonitor &battery);
+    void Log_Write_GenSet(const AP_GenSet &genset, uint64_t time_us=0);
     void Log_Write_Compass(const Compass &compass, uint64_t time_us=0);
     void Log_Write_Mode(uint8_t mode, uint8_t reason = 0);
 
