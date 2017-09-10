@@ -498,6 +498,7 @@ void PX4RCOutput::_send_outputs(void)
                         {
                             ap_uc->rco_write(_period[i], i);
                         }
+                        ap_uc->rco_arm_actuators(true);
 
                         if (hal.util->safety_switch_state() != AP_HAL::Util::SAFETY_DISARMED) {
                             ap_uc->rco_arm_actuators(true);
