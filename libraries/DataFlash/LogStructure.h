@@ -520,6 +520,18 @@ struct PACKED log_Current {
     uint16_t cell_voltages[10];
 };
 
+struct PACKED log_GenSet_Status {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    bool fault_level_1;
+    bool fault_level_2;
+    uint8_t mode;
+    uint8_t update_counter;
+    uint16_t bus_voltage_mv;
+    uint16_t ic_rpm;
+    uint64_t last_timestamp;
+};
+
 struct PACKED log_Compass {
     LOG_PACKET_HEADER;
     uint64_t time_us;
@@ -904,7 +916,7 @@ Format characters in the format string for binary log messages
       "RSSI",  "Qf",     "TimeUS,RXRSSI" }, \
     { LOG_BARO_MSG, sizeof(log_BARO), \
       "BARO",  BARO_FMT, BARO_LABELS }, \
-    { LOG_POWR_MSG, sizeof(log_POWR), \
+	{ LOG_POWR_MSG, sizeof(log_POWR), \
       "POWR","QffH","TimeUS,Vcc,VServo,Flags" },  \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
       "CMD", "QHHHfffffff","TimeUS,CTot,CNum,CId,Prm1,Prm2,Prm3,Prm4,Lat,Lng,Alt" }, \
@@ -931,7 +943,7 @@ Format characters in the format string for binary log messages
     { LOG_DF_MAV_STATS, sizeof(log_DF_MAV_Stats), \
       "DMS", "IIIIIBBBBBBBBBB",         "TimeMS,N,Dp,RT,RS,Er,Fa,Fmn,Fmx,Pa,Pmn,Pmx,Sa,Smn,Smx" }, \
     { LOG_BEACON_MSG, sizeof(log_Beacon), \
-      "BCN", "QBBfffffff",  "TimeUS,Health,Cnt,D0,D1,D2,D3,PosX,PosY,PosZ" }
+      "BCN", "QBBfffffff",  "TimeUS,Health,Cnt,D0,D1,D2,D3,PosX,PosY,PosZ"}
 
 // messages for more advanced boards
 #define LOG_EXTRA_STRUCTURES \
@@ -1081,6 +1093,8 @@ Format characters in the format string for binary log messages
       "RALY", "QBBLLh", "TimeUS,Tot,Seq,Lat,Lng,Alt" }, \
     { LOG_VISUALODOM_MSG, sizeof(log_VisualOdom), \
       "VISO", "Qffffffff", "TimeUS,dt,AngDX,AngDY,AngDZ,PosDX,PosDY,PosDZ,conf" }
+    //{ LOG_GENSET_STATUS_MSG, sizeof(log_GenSet_Status)
+      //"GNST",  "QBBBBHHQ", "TimeUS,FaultL1,FaultL2,Mode,UpdateCounter,BusVoltage,IcRPM,LastTimestamp" }
 
 // #if SBP_HW_LOGGING
 #define LOG_SBP_STRUCTURES \
@@ -1213,6 +1227,8 @@ enum LogMessages {
     LOG_VISUALODOM_MSG,
     LOG_AOA_SSA_MSG,
     LOG_BEACON_MSG,
+
+    LOG_GENSET_STATUS_MSG
 };
 
 enum LogOriginType {
