@@ -103,6 +103,7 @@ void Copter::init_genset()
     if (!genset.init()) {
         // make sure we don't pass a broken compass to DCM
         cliSerial->printf("GENSET INIT ERROR\n");
+        Log_Write_Error(ERROR_SUBSYSTEM_GENSET,ERROR_CODE_FAILED_TO_INITIALISE);
         return;
     }
 }
