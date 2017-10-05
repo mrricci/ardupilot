@@ -407,10 +407,11 @@ void AP_UAVCAN::do_cyclic(void)
         } else {
             if (rc_out_sem_take()) {
                 // Broadcast LPT GenSet message
-                if (_rco_conf[8].active)
+            	//	note: rc channels are 1-indexed in the GUI and 0-indexed in the code
+                if (_rco_conf[10].active)
                 {
                     uavcan::equipment::genset::GenSetCmd genset_cmd_msg;
-                    genset_cmd_msg.pwm = _rco_conf[8].pulse;      //output channel 9
+                    genset_cmd_msg.pwm = _rco_conf[10].pulse; //output channel 11
                     genset_cmd->broadcast(genset_cmd_msg);  //I think this needs to be uncommented to enable CAN ON\OFF commands
                 }
 
