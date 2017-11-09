@@ -40,7 +40,7 @@
 #include <AP_GPS/AP_GPS.h>             // ArduPilot GPS library
 #include <DataFlash/DataFlash.h>          // ArduPilot Mega Flash Memory Library
 #include <AP_ADC/AP_ADC.h>             // ArduPilot Mega Analog to Digital Converter Library
-#include <AP_GenSet/AP_GenSet.h>
+//#include <AP_GenSet/AP_GenSet.h>
 #include <AP_Baro/AP_Baro.h>
 #include <AP_Compass/AP_Compass.h>         // ArduPilot Mega Magnetometer Library
 #include <AP_Math/AP_Math.h>            // ArduPilot Mega Vector/Matrix math Library
@@ -190,7 +190,7 @@ private:
     // flight modes convenience array
     AP_Int8 *flight_modes;
 
-    AP_GenSet genset;
+    //AP_GenSet genset;
     AP_Baro barometer;
     Compass compass;
     AP_InertialSensor ins;
@@ -1032,7 +1032,7 @@ private:
     void init_rangefinder(void);
     void read_rangefinder(void);
     bool rangefinder_alt_ok();
-    void init_genset();
+    //void init_genset();
     void init_compass();
     void init_optflow();
     void update_optical_flow(void);

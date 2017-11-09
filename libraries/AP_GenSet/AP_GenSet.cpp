@@ -19,14 +19,16 @@
  */
 #include "AP_GenSet.h"
 
-#include <utility>
-
 #include <AP_Common/AP_Common.h>
 #include <AP_HAL/AP_HAL.h>
+#include <AP_Notify/AP_Notify.h>
 #include <AP_BoardConfig/AP_BoardConfig.h>
 #include <AP_Vehicle/AP_Vehicle_Type.h>
 
+#include "AP_GenSet_Backend.h"
+
 #if HAL_WITH_UAVCAN
+#include <AP_UAVCAN/AP_UAVCAN.h>
 #include "AP_GenSet_UAVCAN.h"
 #endif
 
@@ -38,9 +40,6 @@ extern const AP_HAL::HAL& hal;
  */
 AP_GenSet::AP_GenSet()
 {
-    primary_instance = 0;
-    num_instances = 0;
-
     init();
 }
 
@@ -49,6 +48,9 @@ AP_GenSet::AP_GenSet()
  */
 bool AP_GenSet::init()
 {
+    primary_instance = 0;
+    num_instances = 0;
+
     AP_GenSet_Backend *new_genset = nullptr;
 
 #if HAL_WITH_UAVCAN
@@ -93,18 +95,18 @@ bool AP_GenSet::init()
  */
 void AP_GenSet::update(void)
 {
-	uint8_t instance = primary_instance;
-    if (drivers[instance] == nullptr) {
-        printf("No GenSet backends available\n");
-        return;
-    }
+	//uint8_t instance = primary_instance;
+    //if (drivers[instance] == nullptr) {
+    //    printf("No GenSet backends available\n");
+    //    return;
+    //}
 
     // we have an active driver for this instance
-    bool result = drivers[instance]->read();
+    //bool result = drivers[instance]->read();
 
-    if (result != true) {
-            printf("AP_GenSet::update() - read() failed\n");
-            return;
-    }
+    //if (result != true) {
+    //        printf("AP_GenSet::update() - read() failed\n");
+    //        return;
+    //}
 }
 

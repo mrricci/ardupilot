@@ -1,12 +1,12 @@
 #pragma once
 
 #include <AP_HAL/AP_HAL.h>
+#include <AP_Common/AP_Common.h>
 #include <AP_Param/AP_Param.h>
-#include <Filter/Filter.h>
-#include <Filter/DerivativeFilter.h>
+#include <AP_Vehicle/AP_Vehicle.h>
 
 // maximum number of genset instances
-#define GENSET_MAX_INSTANCES 1
+#define GENSET_MAX_INSTANCES 2
 
 class AP_GenSet_Backend;
 

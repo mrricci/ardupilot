@@ -97,15 +97,15 @@ void Copter::rpm_update(void)
     }
 }
 
-// initialise genset
-void Copter::init_genset()
-{
-    if (!genset.init()) {
-        // make sure we don't pass a broken compass to DCM
-        cliSerial->printf("GENSET INIT ERROR\n");
-        return;
-    }
-}
+// initialize genset
+//void Copter::init_genset()
+//{
+//    if (!genset.init()) {
+//        // make sure we don't pass a broken compass to DCM
+//        cliSerial->printf("GENSET INIT ERROR\n");
+//        return;
+//    }
+//}
 
 // initialise compass
 void Copter::init_compass()
