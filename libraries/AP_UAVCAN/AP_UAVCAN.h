@@ -93,8 +93,7 @@ public:
     void update_mag_state(uint8_t node);
 
 
-    uint8_t register_genset_listener(AP_GenSet_Backend* new_listener,
-                                   uint8_t preferred_channel);
+    uint8_t register_genset_listener(AP_GenSet_Backend* new_listener, uint8_t preferred_channel);
     void remove_genset_listener(AP_GenSet_Backend* rem_listener);
     AP_GenSet::GenSet_Status *find_genset_node(uint8_t node);
     void update_genset_status(uint8_t node);

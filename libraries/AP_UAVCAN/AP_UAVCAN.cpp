@@ -234,7 +234,6 @@ static void air_data_st_cb(const uavcan::ReceivedDataStructure<uavcan::equipment
 static uavcan::Subscriber<uavcan::equipment::genset::GenSetStatus> *genset_status;
 static void genset_status_cb(const uavcan::ReceivedDataStructure<uavcan::equipment::genset::GenSetStatus>& msg)
 {
-	/*
     if (hal.can_mgr != nullptr) {
         AP_UAVCAN *ap_uavcan = hal.can_mgr->get_UAVCAN();
         if (ap_uavcan != nullptr) {
@@ -254,8 +253,8 @@ static void genset_status_cb(const uavcan::ReceivedDataStructure<uavcan::equipme
             }
         }
     }
-    */
 }
+
 
 // publisher interfaces
 static uavcan::Publisher<uavcan::equipment::actuator::ArrayCommand> *act_out_array;
@@ -379,7 +378,7 @@ bool AP_UAVCAN::try_init(void)
                         debug_uavcan(1, "UAVCAN Temperature subscriber start problem\n\r");
                         return false;
                     }
-/*
+
                     hal.console->printf("UAVCAN GenSetStatus subscriber starting...\n\r");
                     genset_status = new uavcan::Subscriber<uavcan::equipment::genset::GenSetStatus>(*node);
                     const int genset_status_start_res = genset_status->start(genset_status_cb);
@@ -387,7 +386,7 @@ bool AP_UAVCAN::try_init(void)
                         debug_uavcan(1, "UAVCAN GenSetStatus subscriber start problem\n\r");
                         return false;
                     }
-*/
+
                     act_out_array = new uavcan::Publisher<uavcan::equipment::actuator::ArrayCommand>(*node);
                     act_out_array->setTxTimeout(uavcan::MonotonicDuration::fromMSec(20));
                     act_out_array->setPriority(uavcan::TransferPriority::OneLowerThanHighest);
@@ -902,7 +901,6 @@ void AP_UAVCAN::update_mag_state(uint8_t node)
 uint8_t AP_UAVCAN::register_genset_listener(AP_GenSet_Backend* new_listener, uint8_t preferred_channel)
 {
     uint8_t sel_place = 255, ret = 0;
-    /*
     for (uint8_t i = 0; i < AP_UAVCAN_MAX_LISTENERS; i++) {
         if (_genset_listeners[i] == nullptr) {
             sel_place = i;
@@ -934,7 +932,6 @@ uint8_t AP_UAVCAN::register_genset_listener(AP_GenSet_Backend* new_listener, uin
             }
         }
     }
-*/
     if (ret<=0)
     {
         debug_uavcan(1, "UAVCAN reg_GENSET place: ERROR\n\r");
@@ -945,7 +942,6 @@ uint8_t AP_UAVCAN::register_genset_listener(AP_GenSet_Backend* new_listener, uin
 
 void AP_UAVCAN::remove_genset_listener(AP_GenSet_Backend* rem_listener)
 {
-	/*
     // Check for all listeners and compare pointers
     for (uint8_t i = 0; i < AP_UAVCAN_MAX_LISTENERS; i++) {
         if (_genset_listeners[i] == rem_listener) {
@@ -958,12 +954,10 @@ void AP_UAVCAN::remove_genset_listener(AP_GenSet_Backend* rem_listener)
             _genset_listener_to_node[i] = 255;
         }
     }
-    */
 }
 
 AP_GenSet::GenSet_Status *AP_UAVCAN::find_genset_node(uint8_t node)
 {
-	/*
     // Check if such node is already defined
     for (uint8_t i = 0; i < AP_UAVCAN_MAX_GENSET_NODES; i++) {
         if (_genset_nodes[i] == node) {
@@ -978,25 +972,22 @@ AP_GenSet::GenSet_Status *AP_UAVCAN::find_genset_node(uint8_t node)
             return &_genset_node_status[i];
         }
     }
-*/
     // If no space is left - return nullptr
     return nullptr;
 }
 
 void AP_UAVCAN::update_genset_status(uint8_t node)
 {
-	/*
     // Go through all listeners of specified node and call their's update methods
     for (uint8_t i = 0; i < AP_UAVCAN_MAX_GENSET_NODES; i++) {
         if (_genset_nodes[i] == node) {
             for (uint8_t j = 0; j < AP_UAVCAN_MAX_LISTENERS; j++) {
             	if (_genset_listener_to_node[j] == i) {
-                    _genset_listeners[j]->handle_genset_msg(_genset_node_status[i]);
+        //            _genset_listeners[j]->handle_genset_msg(_genset_node_status[i]);
                 }
             }
         }
     }
-    */
 }
 
 #endif // HAL_WITH_UAVCAN
